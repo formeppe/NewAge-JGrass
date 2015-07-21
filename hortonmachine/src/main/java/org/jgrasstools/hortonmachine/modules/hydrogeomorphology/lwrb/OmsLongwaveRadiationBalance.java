@@ -144,6 +144,11 @@ public class OmsLongwaveRadiationBalance extends JGTModel {
 	@Description("The path to atmospheric trasmittance pruduct output.")
 	@In
 	public String pathToTau;
+	@Description("The path to atmospheric trasmittance pruduct output.")
+	@In
+	public double pEpsilonS=0.98;	
+	
+	
 
 	@Description("The path to beam component output.")
 	@In
@@ -1040,9 +1045,15 @@ public class OmsLongwaveRadiationBalance extends JGTModel {
 					* Math.pow(clearness, pB_Cloud);
 
 			double downwellingallsky = downwellingclearsky * cloudnessIndex;
+			double t=temp+ 273.15;
+			System.out.println("t= "+t);
 
-			double upwelling = 0.98 * ConstBoltz
-					* Math.pow((Math.pow(pC_up * temp, pD_up) + 273.15), 4);
+			t=pC_up+pD_up*t;
+			System.out.println("tmodified= "+t);
+
+			double upwelling = pEpsilonS * ConstBoltz
+					* Math.pow(t, 4);
+			System.out.println("upwelling= "+upwelling);
 
 			risultato[0] = downwellingclearsky;
 			risultato[1] = downwellingallsky;
